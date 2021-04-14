@@ -18,24 +18,24 @@ Apify.main(async () => {
     validateInput(input);
 
     const {
-        url,
-        contentSelector,
-        sendNotificationTo,
-        // if screenshotSelector is not defined, use contentSelector for screenshot
-        screenshotSelector = contentSelector,
-        sendNotificationText,
+        url1: url,
+        url2: url,
+        url3: url,
+        contentSelector1,
+        contentSelector2,
+        contentSelector3,
         proxy = {
             useApifyProxy: false
         },
         navigationTimeout = 30000,
     } = input;
 
-    // define name for a key-value store based on task ID or actor ID
-    // (to be able to have more content checkers under one Apify account)
-    let storeName = 'content-checker-store-';
-    storeName += !process.env.APIFY_ACTOR_TASK_ID ? process.env.APIFY_ACT_ID : process.env.APIFY_ACTOR_TASK_ID;
-    // use or create a named key-value store
-    const store = await Apify.openKeyValueStore(storeName);
+    // // define name for a key-value store based on task ID or actor ID
+    // // (to be able to have more content checkers under one Apify account)
+    // let storeName = 'content-checker-store-';
+    // storeName += !process.env.APIFY_ACTOR_TASK_ID ? process.env.APIFY_ACT_ID : process.env.APIFY_ACTOR_TASK_ID;
+    // // use or create a named key-value store
+    // const store = await Apify.openKeyValueStore(storeName);
 
     // use or create a named key-value store for historic data
     var today = new Date();
@@ -47,21 +47,16 @@ Apify.main(async () => {
 
     const historic_store = await Apify.openKeyValueStore(historic_storeName);
 
-    // get data from previous run
-    const previousScreenshot = await store.getValue('currentScreenshot.png');
-    const previousData = await store.getValue('currentData');
-    const proxyConfiguration = await Apify.createProxyConfiguration(proxy);
-
     // open page in a browser
     log.info('Launching Puppeteer...');
     const browser = await Apify.launchPuppeteer({
         proxyUrl: proxyConfiguration ? proxyConfiguration.newUrl() : undefined,
     });
 
-    log.info(`Opening URL: ${url}`);
+    log.info(`Opening URL: ${url1}`);
     const page = await browser.newPage();
     await page.setViewport({ width: 1920, height: 1080 });
-    await page.goto(url, {
+    await page.goto(url1, {
         waitUntil: 'networkidle2',
         timeout: navigationTimeout,
     });
@@ -71,15 +66,15 @@ Apify.main(async () => {
     log.info('Sleeping 5s ...');
     await sleep(5000);
 
-    // Store a screenshot
-    log.info('Saving screenshot...');
-    let screenshotBuffer = null;
-    try {
-        screenshotBuffer = await screenshotDOMElement(page, screenshotSelector, 10);
-    } catch (e) {
-        throw new Error('Cannot get screenshot (screenshot selector is probably wrong)');
-    }
-    await store.setValue('currentScreenshot.png', screenshotBuffer, { contentType: 'image/png' });
+    // // Store a screenshot
+    // log.info('Saving screenshot...');
+    // let screenshotBuffer = null;
+    // try {
+    //     screenshotBuffer = await screenshotDOMElement(page, screenshotSelector, 10);
+    // } catch (e) {
+    //     throw new Error('Cannot get screenshot (screenshot selector is probably wrong)');
+    // }
+    // await store.setValue('currentScreenshot.png', screenshotBuffer, { contentType: 'image/png' });
 
     // Store data
     log.info('Saving data...');
@@ -90,12 +85,11 @@ Apify.main(async () => {
         throw new Error('Cannot get content (content selector is probably wrong)');
     }
 
-    log.info(`Previous data: ${previousData}`);
     log.info(`Current data: ${content}`);
     await store.setValue('currentData', content);
     
-    log.info(`Storing current data to historic dataset`);
-    var KeyName = (process.env.HISTORIC_STORE_KEYPREFIX)+dateTime
+    log.info(`Storing data ...`);
+    var KeyName = keyname_prefix1+dateTime
     log.info(`KeyName: ` + KeyName);
     await store.setValue(KeyName, content);
 
@@ -125,7 +119,7 @@ Apify.main(async () => {
             await Apify.call('apify/send-mail', {
                 to: sendNotificationTo,
                 subject: 'Apify content checker - page changed!',
-                text: `URL: ${url}\n\n${notificationNote}Previous data: ${previousData}\n\nCurrent data: ${content}`,
+                text: `URL: ${url1}\n\n${notificationNote}Previous data: ${previousData}\n\nCurrent data: ${content}`,
                 attachments: [
                     {
                         filename: 'previousScreenshot.png',
