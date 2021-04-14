@@ -102,7 +102,7 @@ Apify.main(async () => {
     // TODO: this should wait for the selector to be available
     log.info('Sleeping 5s ...');
     await sleep(5000);
-
+    
     // Get data for url 3
     log.info('Fetching data for url3...');
     let content3 = null;
@@ -112,11 +112,26 @@ Apify.main(async () => {
         throw new Error('Cannot get content (content selector is probably wrong)');
     }
     log.info(`url3 data: ${content3}`);
-
+    
     const dataset = await Apify.openDataset('Kurser20210414');
     dataset.pushData({date: Date_toISOStringLocal(today), time: Time_toISOStringLocal(today), key1: "url1", val1: content1, key2: "url2", val2: content2, key3: "url3", val3: content3})
     log.info('Closing Puppeteer...');
     await browser.close();
-
+    
+    await sleep(5000);
+    const ApifyClient = require('apify-client');
+    const client = new ApifyClient({
+        token: 'uAqFSRMzpGuFCkRb8fjX77tni',
+    });
+        await Apify.call('apify/send-mail', {
+        to: 'boeschricht@gmail.com;boeschricht@gmail.com',
+        subject: 'Kurser på obligationer',
+        html: client.datasets.client.dataset('Kurser20210414').downloadItems("html") 
+        attachments: [{
+            filename: 'Kurser '+ Date_toISOStringLocal(today) +' '+ Time_toISOStringLocal(today) + '.xlsx',
+            data: client.datasets.client.dataset('Kurser20210414').downloadItems("xlsx") 
+        }]
+    });
+    
     log.info('Done.');
 });
