@@ -41,6 +41,7 @@ Apify.main(async () => {
     // const client = await Apify.newClient();
     // const datasetClient = client.datasetClient('jrnKQ29nVrrWuz7KS');
     // const datasetClient = await Apify.client.dataset('jrnKQ29nVrrWuz7KS');
+    client = new ApifyClient();
     const datasetHTML = await client.dataset('jrnKQ29nVrrWuz7KS').downloadItems("html");
     const datasetXLSX = await datasetClient.downloadItems("xlsx");
     await Apify.call('apify/send-mail', {
