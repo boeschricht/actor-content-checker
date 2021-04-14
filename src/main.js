@@ -118,12 +118,9 @@ Apify.main(async () => {
     log.info('Closing Puppeteer...');
     await browser.close();
     
-    const ApifyClient = require('apify-client');
-    const client = new ApifyClient({
-        token: 'uAqFSRMzpGuFCkRb8fjX77tni',
-    });
-    // const datasetClient = client.dataset('jrnKQ29nVrrWuz7KS');
-    const datasetClient = await Apify.client.dataset('jrnKQ29nVrrWuz7KS');
+    const client = await Apify.newClient();
+    const datasetClient = client.dataset('jrnKQ29nVrrWuz7KS');
+    // const datasetClient = await Apify.client.dataset('jrnKQ29nVrrWuz7KS');
     const datasetHTML = await datasetClient.downloadItems("html")
     const datasetXLSX = await datasetClient.downloadItems("xlsx")
     await Apify.call('apify/send-mail', {
