@@ -2,41 +2,49 @@
     "title": "Content checker input",
     "type": "object",
     "schemaVersion": 1,
-    "required": ["url", "contentSelector", "sendNotificationTo"],
+    "required": ["url1", "contentSelector1", "url2", "contentSelector2", "url3", "contentSelector3"],
     "properties": {
-        "url": {
+        "url1": {
             "title": "URL to check",
             "type": "string",
             "description": "URL of a web page to be monitored",
             "editor": "textfield",
-            "prefill": "https://www.apify.com/change-log"
+            "prefill": "http://www.nasdaqomxnordic.com/bonds/denmark/microsite?Instrument=XCSE05NYK01EA53"
         },
-        "contentSelector": {
+        "contentSelector1": {
             "title": "Monitored area selector",
             "type": "string",
             "description": "CSS selector of an area you want to monitor",
             "editor": "textfield",
             "prefill": "[class^=change-log__MonthBox-]:nth-of-type(1) ul"
         },
-        "screenshotSelector": {
-            "title": "Screenshot selector",
+        "url2": {
+            "title": "URL to check",
             "type": "string",
-            "description": "CSS selector of a screenshot you want to get",
+            "description": "URL of a web page to be monitored",
+            "editor": "textfield",
+            "prefill": "http://www.nasdaqomxnordic.com/bonds/denmark/microsite?Instrument=XCSE1NYK01EA53"
+        },
+        "contentSelector2": {
+            "title": "Monitored area selector",
+            "type": "string",
+            "description": "CSS selector of an area you want to monitor",
             "editor": "textfield",
             "prefill": "[class^=change-log__MonthBox-]:nth-of-type(1) ul"
         },
-        "sendNotificationTo": {
-            "title": "Email address",
+        "url3": {
+            "title": "URL to check",
             "type": "string",
-            "description": "Email address where you want to get the notification",
+            "description": "URL of a web page to be monitored",
             "editor": "textfield",
-            "prefill": "info@apify.com"
+            "prefill": "http://www.nasdaqomxnordic.com/bonds/denmark/microsite?Instrument=XCSE15NYK01EDA53"
         },
-        "sendNotificationText": {
-            "title": "Notification Text",
+        "contentSelector3": {
+            "title": "Monitored area selector",
             "type": "string",
-            "description": "Optional text to include in the email notification.",
-            "editor": "textfield"
+            "description": "CSS selector of an area you want to monitor",
+            "editor": "textfield",
+            "prefill": "[class^=change-log__MonthBox-]:nth-of-type(1) ul"
         },
         "proxy": {
             "title": "Proxy Configuration",
