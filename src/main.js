@@ -75,7 +75,6 @@ Apify.main(async () => {
         throw new Error('Cannot get content (content selector is probably wrong)');
     }
     log.info(`url1 data: ${content1}`);
-    await store.setValue(keyname_prefix1 + dateTime, content1);
 
     // open URL2 in a browser
     log.info(`Opening URL2: ` + url2);
