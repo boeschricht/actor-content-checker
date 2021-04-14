@@ -87,6 +87,10 @@ Apify.main(async () => {
     log.info(`Previous data: ${previousData}`);
     log.info(`Current data: ${content}`);
     await store.setValue('currentData', content);
+    
+    log.info(`Storing current data to historic dataset`);
+    await store.setValue(HISTORIC_STORE_KEYPREFIX+'-'+dateTime, content);
+
 
     log.info('Closing Puppeteer...');
     await browser.close();
