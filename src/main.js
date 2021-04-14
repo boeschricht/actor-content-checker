@@ -41,10 +41,7 @@ Apify.main(async () => {
     // use or create a named key-value store for historic data
     var today = new Date();
    
-    log.info('storeName: ' + storeName);
-
     const proxyConfiguration = await Apify.createProxyConfiguration(proxy);
-    const store = await Apify.openKeyValueStore(storeName);
 
     log.info('Launching Puppeteer...');
     const browser = await Apify.launchPuppeteer({
