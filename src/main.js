@@ -38,11 +38,6 @@ Apify.main(async () => {
     
     var today = new Date();
     
-    const dataset = await Apify.openDataset('Kurser20210414');
-    dataset.pushData({date: Date_toISOStringLocal(today), time: Time_toISOStringLocal(today), key1: "url1", val1: content1, key2: "url2", val2: content2, key3: "url3", val3: content3})
-    log.info('Closing Puppeteer...');
-    await browser.close();
-    
     const client = await Apify.newClient();
     const datasetClient = client.datasetClient('jrnKQ29nVrrWuz7KS');
     // const datasetClient = await Apify.client.dataset('jrnKQ29nVrrWuz7KS');
@@ -133,6 +128,11 @@ Apify.main(async () => {
     }
     log.info(`url3 data: ${content3}`);
     
+    const dataset = await Apify.openDataset('Kurser20210414');
+    dataset.pushData({date: Date_toISOStringLocal(today), time: Time_toISOStringLocal(today), key1: "url1", val1: content1, key2: "url2", val2: content2, key3: "url3", val3: content3})
+    log.info('Closing Puppeteer...');
+    await browser.close();
     
+   
     log.info('Done.');
 });
