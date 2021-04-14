@@ -13,7 +13,7 @@ function Date_toISOStringLocal(d) {
   }
   function Time_toISOStringLocal(d) {
     function z(n){return (n<10?'0':'') + n}
-    return z(d.getHours()) + ':' +  
+    return z(d.getHours()+2) + ':' +  
            z(d.getMinutes())
             
   }
