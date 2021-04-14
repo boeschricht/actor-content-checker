@@ -41,7 +41,6 @@ Apify.main(async () => {
     // use or create a named key-value store for historic data
     var today = new Date();
    
-    let storeName = !process.env.DATASET ? ('content-checker-store-'+dateTime) : process.env.DATASET;
     log.info('storeName: ' + storeName);
 
     const proxyConfiguration = await Apify.createProxyConfiguration(proxy);
@@ -120,7 +119,8 @@ Apify.main(async () => {
     }
     log.info(`url3 data: ${content3}`);
 
-    Apify.pushData({date: Date_toISOStringLocal(today), time: Time_toISOStringLocal(today), key1: "url1", val1: content1, key2: "url2", val2: content2, key3: "url3", val3: content3})
+    const dataset = await Apify.openDataset('Kurser20210414');
+    dataset.pushData({date: Date_toISOStringLocal(today), time: Time_toISOStringLocal(today), key1: "url1", val1: content1, key2: "url2", val2: content2, key3: "url3", val3: content3})
     log.info('Closing Puppeteer...');
     await browser.close();
 
