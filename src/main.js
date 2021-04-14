@@ -13,37 +13,6 @@ function toISOStringLocal(d) {
             
   }
 
-function getData(dataStore, sURL, sURLdescription, sURLContentSelector, sURL_Keyname_Prefix) {
-    // open URL1 in a browser
-    log.info(`Opening URL1: ${sURLdescription}`);
-    const page = await browser.newPage();
-    await page.setViewport({ width: 1920, height: 1080 });
-    await page.goto(sURL, {
-        waitUntil: 'networkidle2',
-        timeout: navigationTimeout,
-    });
-
-    // wait 5 seconds (if there is some dynamic content)
-    // TODO: this should wait for the selector to be available
-    log.info('Sleeping 5s ...');
-    await sleep(5000);
-
-    // Store data
-    log.info('Saving data for ${sURLdescription}...');
-    let content = null;
-    try {
-        content = await page.$eval(sContentSelector, (el) => el.textContent);
-    } catch (e) {
-        throw new Error('Cannot get content (content selector is probably wrong)');
-    }
-    
-    log.info(`Storing data ...`);
-    log.info(`${sURLdescription} data: ${content}`);
-    log.info(`KeyName: ` + sURLContentSelector);
-    await dataStore.setValue(sURL_Keyname_Prefix + dateTime, content);
-}
-
-
 Apify.main(async () => {
     const input = await Apify.getInput();
     validateInput(input);
@@ -64,6 +33,35 @@ Apify.main(async () => {
         navigationTimeout = 30000,
     } = input;
 
+    function getData(dataStore, sURL, sURLdescription, sURLContentSelector, sURL_Keyname_Prefix) {
+        // open URL1 in a browser
+        log.info(`Opening URL1: ${sURLdescription}`);
+        const page = await browser.newPage();
+        await page.setViewport({ width: 1920, height: 1080 });
+        await page.goto(sURL, {
+            waitUntil: 'networkidle2',
+            timeout: navigationTimeout,
+        });
+    
+        // wait 5 seconds (if there is some dynamic content)
+        // TODO: this should wait for the selector to be available
+        log.info('Sleeping 5s ...');
+        await sleep(5000);
+    
+        // Store data
+        log.info('Saving data for ${sURLdescription}...');
+        let content = null;
+        try {
+            content = await page.$eval(sContentSelector, (el) => el.textContent);
+        } catch (e) {
+            throw new Error('Cannot get content (content selector is probably wrong)');
+        }
+        
+        log.info(`Storing data ...`);
+        log.info(`${sURLdescription} data: ${content}`);
+        log.info(`KeyName: ` + sURLContentSelector);
+        await dataStore.setValue(sURL_Keyname_Prefix + dateTime, content);
+    }
     // use or create a named key-value store for historic data
     var today = new Date();
     var dateTime = toISOStringLocal(today)
