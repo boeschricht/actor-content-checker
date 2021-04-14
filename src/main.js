@@ -12,51 +12,13 @@ function toISOStringLocal(d) {
            z(d.getMinutes())
             
   }
-  
-Apify.main(async () => {
-    const input = await Apify.getInput();
-    validateInput(input);
 
-    const {
-        url1: url,
-        url2: url,
-        url3: url,
-        contentSelector1,
-        contentSelector2,
-        contentSelector3,
-        proxy = {
-            useApifyProxy: false
-        },
-        navigationTimeout = 30000,
-    } = input;
-
-    // // define name for a key-value store based on task ID or actor ID
-    // // (to be able to have more content checkers under one Apify account)
-    // let storeName = 'content-checker-store-';
-    // storeName += !process.env.APIFY_ACTOR_TASK_ID ? process.env.APIFY_ACT_ID : process.env.APIFY_ACTOR_TASK_ID;
-    // // use or create a named key-value store
-    // const store = await Apify.openKeyValueStore(storeName);
-
-    // use or create a named key-value store for historic data
-    var today = new Date();
-    var dateTime = toISOStringLocal(today)
-   
-    let historic_storeName = 'content-checker-store-';
-    historic_storeName += !process.env.HISTORIC_STORE_ID ? dateTime : process.env.HISTORIC_STORE_ID;
-    log.info('historic_storeName: ' + historic_storeName);
-
-    const historic_store = await Apify.openKeyValueStore(historic_storeName);
-
-    // open page in a browser
-    log.info('Launching Puppeteer...');
-    const browser = await Apify.launchPuppeteer({
-        proxyUrl: proxyConfiguration ? proxyConfiguration.newUrl() : undefined,
-    });
-
-    log.info(`Opening URL: ${url1}`);
+function getData(dataStore, sURL, sURLdescription, sURLContentSelector, sURL_Keyname_Prefix) {
+    // open URL1 in a browser
+    log.info(`Opening URL1: ${sURLdescription}`);
     const page = await browser.newPage();
     await page.setViewport({ width: 1920, height: 1080 });
-    await page.goto(url1, {
+    await page.goto(sURL, {
         waitUntil: 'networkidle2',
         timeout: navigationTimeout,
     });
@@ -66,81 +28,62 @@ Apify.main(async () => {
     log.info('Sleeping 5s ...');
     await sleep(5000);
 
-    // // Store a screenshot
-    // log.info('Saving screenshot...');
-    // let screenshotBuffer = null;
-    // try {
-    //     screenshotBuffer = await screenshotDOMElement(page, screenshotSelector, 10);
-    // } catch (e) {
-    //     throw new Error('Cannot get screenshot (screenshot selector is probably wrong)');
-    // }
-    // await store.setValue('currentScreenshot.png', screenshotBuffer, { contentType: 'image/png' });
-
     // Store data
-    log.info('Saving data...');
+    log.info('Saving data for ${sURLdescription}...');
     let content = null;
     try {
-        content = await page.$eval(contentSelector, (el) => el.textContent);
+        content = await page.$eval(sContentSelector, (el) => el.textContent);
     } catch (e) {
         throw new Error('Cannot get content (content selector is probably wrong)');
     }
-
-    log.info(`Current data: ${content}`);
-    await store.setValue('currentData', content);
     
     log.info(`Storing data ...`);
-    var KeyName = keyname_prefix1+dateTime
-    log.info(`KeyName: ` + KeyName);
-    await store.setValue(KeyName, content);
+    log.info(`${sURLdescription} data: ${content}`);
+    log.info(`KeyName: ` + sURLContentSelector);
+    await dataStore.setValue(sURL_Keyname_Prefix + dateTime, content);
+}
 
+
+Apify.main(async () => {
+    const input = await Apify.getInput();
+    validateInput(input);
+
+    const {
+        url: url1,
+        url: url2,
+        url: url2,
+        contentSelector1,
+        contentSelector2,
+        contentSelector3,
+        keyname_prefix1,
+        keyname_prefix2,
+        keyname_prefix3,
+        proxy = {
+            useApifyProxy: false
+        },
+        navigationTimeout = 30000,
+    } = input;
+
+    // use or create a named key-value store for historic data
+    var today = new Date();
+    var dateTime = toISOStringLocal(today)
+   
+    let storeName = !process.env.DATASET ? ('content-checker-store-'+dateTime) : process.env.DATASET;
+    log.info('storeName: ' + storeName);
+
+    const store = await Apify.openKeyValueStore(storeName);
+
+    log.info('Launching Puppeteer...');
+    const browser = await Apify.launchPuppeteer({
+        proxyUrl: proxyConfiguration ? proxyConfiguration.newUrl() : undefined,
+    });
+    
+    getData(store, url1, "url1", sContentSelector1, keyname_prefix1)
+    getData(store, url2, "url2", sContentSelector2, keyname_prefix2)
+    getData(store, url3, "url3", sContentSelector3, keyname_prefix3)
 
     log.info('Closing Puppeteer...');
     await browser.close();
 
     log.info('Done.');
-
-    if (previousScreenshot === null) {
-        log.warning('Running for the first time, no check');
-    } else {
-        // store data from this run
-        await store.setValue('previousScreenshot.png', previousScreenshot, { contentType: 'image/png' });
-        await store.setValue('previousData', previousData);
-
-        // check data
-        if (previousData === content) {
-            log.warning('No change');
-        } else {
-            log.warning('Content changed');
-
-            const notificationNote = sendNotificationText ? `Note: ${sendNotificationText}\n\n` : '';
-
-            // send mail
-            log.info('Sending mail...');
-            await Apify.call('apify/send-mail', {
-                to: sendNotificationTo,
-                subject: 'Apify content checker - page changed!',
-                text: `URL: ${url1}\n\n${notificationNote}Previous data: ${previousData}\n\nCurrent data: ${content}`,
-                attachments: [
-                    {
-                        filename: 'previousScreenshot.png',
-                        data: previousScreenshot.toString('base64'),
-                    },
-                    {
-                        filename: 'currentScreenshot.png',
-                        data: screenshotBuffer.toString('base64'),
-                    },
-                ],
-
-            });
-        }
-    }
-
-    log.info('You can check the output in the named key-value store on the following URLs:');
-    log.info(`- https://api.apify.com/v2/key-value-stores/${store.storeId}/records/currentScreenshot.png`);
-    log.info(`- https://api.apify.com/v2/key-value-stores/${store.storeId}/records/currentData`);
-
-    if (previousScreenshot !== null) {
-        log.info(`- https://api.apify.com/v2/key-value-stores/${store.storeId}/records/previousScreenshot.png`);
-        log.info(`- https://api.apify.com/v2/key-value-stores/${store.storeId}/records/previousData`);
-    }
 });

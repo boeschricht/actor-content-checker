@@ -18,6 +18,13 @@
             "editor": "textfield",
             "prefill": "[class^=change-log__MonthBox-]:nth-of-type(1) ul"
         },
+        "keyname_prefix1": {
+            "title": "Prefix for keynames",
+            "type": "string",
+            "description": "Prefix for keynames associated to url1 in dataset",
+            "editor": "textfield",
+            "prefill": "url1-"
+        },
         "url2": {
             "title": "URL to check",
             "type": "string",
@@ -32,6 +39,13 @@
             "editor": "textfield",
             "prefill": "[class^=change-log__MonthBox-]:nth-of-type(1) ul"
         },
+        "keyname_prefix2": {
+            "title": "Prefix for keynames",
+            "type": "string",
+            "description": "Prefix for keynames associated to url2 in dataset",
+            "editor": "textfield",
+            "prefill": "url1-"
+        },
         "url3": {
             "title": "URL to check",
             "type": "string",
@@ -45,6 +59,13 @@
             "description": "CSS selector of an area you want to monitor",
             "editor": "textfield",
             "prefill": "[class^=change-log__MonthBox-]:nth-of-type(1) ul"
+        },
+        "keyname_prefix3": {
+            "title": "Prefix for keynames",
+            "type": "string",
+            "description": "Prefix for keynames associated to url3 in dataset",
+            "editor": "textfield",
+            "prefill": "url1-"
         },
         "proxy": {
             "title": "Proxy Configuration",
