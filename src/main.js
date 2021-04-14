@@ -5,6 +5,14 @@ const validateInput = require('./validate-input');
 
 const { log, sleep } = Apify.utils;
 
+function toISOStringLocal(d) {
+    function z(n){return (n<10?'0':'') + n}
+    return d.getFullYear() + '-' + z(d.getMonth()+1) + '-' +
+           z(d.getDate()) + 'T' + z(d.getHours()) + ':' +
+           z(d.getMinutes())
+            
+  }
+  
 Apify.main(async () => {
     const input = await Apify.getInput();
     validateInput(input);
@@ -31,9 +39,7 @@ Apify.main(async () => {
 
     // use or create a named key-value store for historic data
     var today = new Date();
-    var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-    var dateTime = date+'-'+time;
+    var dateTime = toISOStringLocal(today)
    
     let historic_storeName = 'content-checker-store-';
     historic_storeName += !process.env.HISTORIC_STORE_ID ? dateTime : process.env.HISTORIC_STORE_ID;
