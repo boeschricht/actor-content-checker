@@ -40,6 +40,7 @@ Apify.main(async () => {
     let storeName = !process.env.DATASET ? ('content-checker-store-'+dateTime) : process.env.DATASET;
     log.info('storeName: ' + storeName);
 
+    const proxyConfiguration = await Apify.createProxyConfiguration(proxy);
     const store = await Apify.openKeyValueStore(storeName);
 
     log.info('Launching Puppeteer...');
