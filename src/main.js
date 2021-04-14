@@ -91,7 +91,7 @@ Apify.main(async () => {
 
     // Store data
     log.info('Saving data for url2...');
-    let content = null;
+    content = null;
     try {
         content = await page.$eval(contentSelector2, (el) => el.textContent);
     } catch (e) {
@@ -119,7 +119,7 @@ Apify.main(async () => {
 
     // Store data
     log.info('Saving data for url3...');
-    let content = null;
+    content = null;
     try {
         content = await page.$eval(contentSelector3, (el) => el.textContent);
     } catch (e) {
