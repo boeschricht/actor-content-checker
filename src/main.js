@@ -74,7 +74,7 @@ Apify.main(async () => {
     log.info(`Storing data ...`);
     log.info(`url1 data: ${content}`);
     log.info(`KeyName: ` + keyname_prefix1 + dateTime);
-    await dataStore.setValue(keyname_prefix1 + dateTime, content);
+    await store.setValue(keyname_prefix1 + dateTime, content);
 
     // open URL2 in a browser
     log.info(`Opening URL2: ` + url2);
@@ -102,7 +102,7 @@ Apify.main(async () => {
     log.info(`Storing data ...`);
     log.info(`url2 data: ${content}`);
     log.info(`KeyName: ` + keyname_prefix2 + dateTime);
-    await dataStore.setValue(keyname_prefix2 + dateTime, content);
+    await store.setValue(keyname_prefix2 + dateTime, content);
 
     // open URL3 in a browser
     log.info(`Opening URL3: ` + url3);
@@ -130,7 +130,7 @@ Apify.main(async () => {
     log.info(`Storing data ...`);
     log.info(`url3 data: ${content}`);
     log.info(`KeyName: ` + keyname_prefix3 + dateTime);
-    await dataStore.setValue(keyname_prefix3 + dateTime, content);
+    await store.setValue(keyname_prefix3 + dateTime, content);
 
     log.info('Closing Puppeteer...');
     await browser.close();
