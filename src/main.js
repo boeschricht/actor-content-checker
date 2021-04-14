@@ -77,7 +77,7 @@ Apify.main(async () => {
 
     // open URL2 in a browser
     log.info(`Opening URL2: ` + url2);
-    const page = await browser.newPage();
+    page = await browser.newPage();
     await page.setViewport({ width: 1920, height: 1080 });
     await page.goto(url2, {
         waitUntil: 'networkidle2',
@@ -105,7 +105,7 @@ Apify.main(async () => {
 
     // open URL3 in a browser
     log.info(`Opening URL3: ` + url3);
-    const page = await browser.newPage();
+    page = await browser.newPage();
     await page.setViewport({ width: 1920, height: 1080 });
     await page.goto(url3, {
         waitUntil: 'networkidle2',
