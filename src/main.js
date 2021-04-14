@@ -5,10 +5,15 @@ const validateInput = require('./validate-input');
 
 const { log, sleep } = Apify.utils;
 
-function toISOStringLocal(d) {
+function Date_toISOStringLocal(d) {
     function z(n){return (n<10?'0':'') + n}
     return d.getFullYear() + '-' + z(d.getMonth()+1) + '-' +
-           z(d.getDate()) + 'T' + z(d.getHours()) + 
+           z(d.getDate())
+            
+  }
+  function Time_toISOStringLocal(d) {
+    function z(n){return (n<10?'0':'') + n}
+    return z(d.getHours()) + ':' +  
            z(d.getMinutes())
             
   }
@@ -35,7 +40,6 @@ Apify.main(async () => {
 
     // use or create a named key-value store for historic data
     var today = new Date();
-    var dateTime = toISOStringLocal(today)
    
     let storeName = !process.env.DATASET ? ('content-checker-store-'+dateTime) : process.env.DATASET;
     log.info('storeName: ' + storeName);
@@ -117,7 +121,7 @@ Apify.main(async () => {
     }
     log.info(`url3 data: ${content3}`);
 
-    Apify.pushData({date: dateTime, key1: "url1", val1: content1, key2: "url2", val2: content2, key3: "url3", val3: content3})
+    Apify.pushData({date: Date_toISOStringLocal(today), time: Time_toISOStringLocal(today), key1: "url1", val1: content1, key2: "url2", val2: content2, key3: "url3", val3: content3})
     log.info('Closing Puppeteer...');
     await browser.close();
 
