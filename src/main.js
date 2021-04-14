@@ -39,10 +39,10 @@ Apify.main(async () => {
     var today = new Date();
     
     const client = await Apify.newClient();
-    const datasetClient = client.datasetClient('jrnKQ29nVrrWuz7KS');
+    // const datasetClient = client.datasetClient('jrnKQ29nVrrWuz7KS');
     // const datasetClient = await Apify.client.dataset('jrnKQ29nVrrWuz7KS');
-    const datasetHTML = await datasetClient.downloadItems("html")
-    const datasetXLSX = await datasetClient.downloadItems("xlsx")
+    const datasetHTML = await client.dataset('jrnKQ29nVrrWuz7KS').downloadItems("html");
+    const datasetXLSX = await datasetClient.downloadItems("xlsx");
     await Apify.call('apify/send-mail', {
         to: 'boeschricht@gmail.com;boeschricht@gmail.com',
         subject: 'Kurser på obligationer',
@@ -133,6 +133,6 @@ Apify.main(async () => {
     log.info('Closing Puppeteer...');
     await browser.close();
     
-   
+    
     log.info('Done.');
 });
