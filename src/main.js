@@ -89,7 +89,7 @@ Apify.main(async () => {
     await store.setValue('currentData', content);
     
     log.info(`Storing current data to historic dataset`);
-    await store.setValue(process.env.HISTORIC_STORE_KEYPREFIX+'-'+dateTime, content);
+    await store.setValue(process.env.HISTORIC_STORE_KEYPREFIX+dateTime, content);
 
 
     log.info('Closing Puppeteer...');
