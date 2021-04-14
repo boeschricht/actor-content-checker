@@ -30,6 +30,20 @@ Apify.main(async () => {
     // use or create a named key-value store
     const store = await Apify.openKeyValueStore(storeName);
 
+    // use or create a named key-value store for historic data
+
+    var today = new Date();
+    var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    var dateTime = date+'-'+time;
+   
+    let historic_storeName = 'content-checker-store-';
+    historic_storeName += !process.env.HISTORIC_STORE_ID ? dateTime : process.env.HISTORIC_STORE_ID;
+
+
+
+    const store = await Apify.openKeyValueStore(storeName);
+
     // get data from previous run
     const previousScreenshot = await store.getValue('currentScreenshot.png');
     const previousData = await store.getValue('currentData');
