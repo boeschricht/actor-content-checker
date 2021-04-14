@@ -29,9 +29,6 @@ Apify.main(async () => {
         contentSelector1,
         contentSelector2,
         contentSelector3,
-        keyname_prefix1,
-        keyname_prefix2,
-        keyname_prefix3,
         proxy = {
             useApifyProxy: false
         },
