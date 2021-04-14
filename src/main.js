@@ -61,20 +61,17 @@ Apify.main(async () => {
     // TODO: this should wait for the selector to be available
     log.info('Sleeping 5s ...');
     await sleep(5000);
-
-    // Store data
-    log.info('Saving data for url1...');
-    let content = null;
+    
+    // Get data for url 1
+    log.info('Fetching data for url1...');
+    let content1 = null;
     try {
-        content = await page.$eval(contentSelector1, (el) => el.textContent);
+        content1 = await page.$eval(contentSelector1, (el) => el.textContent);
     } catch (e) {
         throw new Error('Cannot get content (content selector is probably wrong)');
     }
-    
-    log.info(`Storing data ...`);
-    log.info(`url1 data: ${content}`);
-    log.info(`KeyName: ` + keyname_prefix1 + dateTime);
-    await store.setValue(keyname_prefix1 + dateTime, content);
+    log.info(`url1 data: ${content1}`);
+    await store.setValue(keyname_prefix1 + dateTime, content1);
 
     // open URL2 in a browser
     log.info(`Opening URL2: ` + url2);
@@ -88,19 +85,15 @@ Apify.main(async () => {
     log.info('Sleeping 5s ...');
     await sleep(5000);
 
-    // Store data
-    log.info('Saving data for url2...');
-    content = null;
+    // Get data for url 2
+    log.info('Fetching data for url2...');
+    let content2 = null;
     try {
-        content = await page.$eval(contentSelector2, (el) => el.textContent);
+        content2 = await page.$eval(contentSelector2, (el) => el.textContent);
     } catch (e) {
         throw new Error('Cannot get content (content selector is probably wrong)');
     }
-    
-    log.info(`Storing data ...`);
-    log.info(`url2 data: ${content}`);
-    log.info(`KeyName: ` + keyname_prefix2 + dateTime);
-    await store.setValue(keyname_prefix2 + dateTime, content);
+    log.info(`url2 data: ${content2}`);
 
     // open URL3 in a browser
     log.info(`Opening URL3: ` + url3);
@@ -114,20 +107,17 @@ Apify.main(async () => {
     log.info('Sleeping 5s ...');
     await sleep(5000);
 
-    // Store data
-    log.info('Saving data for url3...');
-    content = null;
+    // Get data for url 3
+    log.info('Fetching data for url3...');
+    let content3 = null;
     try {
-        content = await page.$eval(contentSelector3, (el) => el.textContent);
+        content3 = await page.$eval(contentSelector3, (el) => el.textContent);
     } catch (e) {
         throw new Error('Cannot get content (content selector is probably wrong)');
     }
-    
-    log.info(`Storing data ...`);
-    log.info(`url3 data: ${content}`);
-    log.info(`KeyName: ` + keyname_prefix3 + dateTime);
-    await store.setValue(keyname_prefix3 + dateTime, content);
+    log.info(`url3 data: ${content3}`);
 
+    Apify.pushData({date: dateTime, key1: "url1", val1: content1, key2: "url2", val2: content2, key3: "url3", val3: content3})
     log.info('Closing Puppeteer...');
     await browser.close();
 
