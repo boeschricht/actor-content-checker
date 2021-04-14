@@ -26,12 +26,10 @@ Apify.main(async () => {
     // (to be able to have more content checkers under one Apify account)
     let storeName = 'content-checker-store-';
     storeName += !process.env.APIFY_ACTOR_TASK_ID ? process.env.APIFY_ACT_ID : process.env.APIFY_ACTOR_TASK_ID;
-
     // use or create a named key-value store
     const store = await Apify.openKeyValueStore(storeName);
 
     // use or create a named key-value store for historic data
-
     var today = new Date();
     var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
     var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
@@ -39,10 +37,9 @@ Apify.main(async () => {
    
     let historic_storeName = 'content-checker-store-';
     historic_storeName += !process.env.HISTORIC_STORE_ID ? dateTime : process.env.HISTORIC_STORE_ID;
+    log.info('historic_storeName: ' + historic_storeName);
 
-
-
-    const store = await Apify.openKeyValueStore(storeName);
+    const historic_store = await Apify.openKeyValueStore(historic_storeName);
 
     // get data from previous run
     const previousScreenshot = await store.getValue('currentScreenshot.png');
