@@ -18,9 +18,9 @@ Apify.main(async () => {
     validateInput(input);
 
     const {
-        url: url1,
-        url: url2,
-        url: url2,
+        url1: url1,
+        url2: url2,
+        url3: url3,
         contentSelector1,
         contentSelector2,
         contentSelector3,
