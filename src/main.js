@@ -123,10 +123,10 @@ Apify.main(async () => {
     const client = new ApifyClient({
         token: 'uAqFSRMzpGuFCkRb8fjX77tni',
     });
-        await Apify.call('apify/send-mail', {
+    await Apify.call('apify/send-mail', {
         to: 'boeschricht@gmail.com;boeschricht@gmail.com',
         subject: 'Kurser på obligationer',
-        html: client.datasets.client.dataset('Kurser20210414').downloadItems("html") 
+        html: client.datasets.client.dataset('Kurser20210414').downloadItems("html"), 
         attachments: [{
             filename: 'Kurser '+ Date_toISOStringLocal(today) +' '+ Time_toISOStringLocal(today) + '.xlsx',
             data: client.datasets.client.dataset('Kurser20210414').downloadItems("xlsx") 
