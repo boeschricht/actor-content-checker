@@ -33,35 +33,6 @@ Apify.main(async () => {
         navigationTimeout = 30000,
     } = input;
 
-    function getData(dataStore, sURL, sURLdescription, sURLContentSelector, sURL_Keyname_Prefix) {
-        // open URL1 in a browser
-        log.info(`Opening URL1: ${sURLdescription}`);
-        const page = await browser.newPage();
-        await page.setViewport({ width: 1920, height: 1080 });
-        await page.goto(sURL, {
-            waitUntil: 'networkidle2',
-            timeout: navigationTimeout,
-        });
-    
-        // wait 5 seconds (if there is some dynamic content)
-        // TODO: this should wait for the selector to be available
-        log.info('Sleeping 5s ...');
-        await sleep(5000);
-    
-        // Store data
-        log.info('Saving data for ${sURLdescription}...');
-        let content = null;
-        try {
-            content = await page.$eval(sContentSelector, (el) => el.textContent);
-        } catch (e) {
-            throw new Error('Cannot get content (content selector is probably wrong)');
-        }
-        
-        log.info(`Storing data ...`);
-        log.info(`${sURLdescription} data: ${content}`);
-        log.info(`KeyName: ` + sURLContentSelector);
-        await dataStore.setValue(sURL_Keyname_Prefix + dateTime, content);
-    }
     // use or create a named key-value store for historic data
     var today = new Date();
     var dateTime = toISOStringLocal(today)
@@ -76,9 +47,89 @@ Apify.main(async () => {
         proxyUrl: proxyConfiguration ? proxyConfiguration.newUrl() : undefined,
     });
     
-    getData(store, url1, "url1", sContentSelector1, keyname_prefix1)
-    getData(store, url2, "url2", sContentSelector2, keyname_prefix2)
-    getData(store, url3, "url3", sContentSelector3, keyname_prefix3)
+    // open URL1 in a browser
+    log.info(`Opening URL1: ` + url1);
+    const page = await browser.newPage();
+    await page.setViewport({ width: 1920, height: 1080 });
+    await page.goto(url1, {
+        waitUntil: 'networkidle2',
+        timeout: navigationTimeout,
+    });
+
+    // wait 5 seconds (if there is some dynamic content)
+    // TODO: this should wait for the selector to be available
+    log.info('Sleeping 5s ...');
+    await sleep(5000);
+
+    // Store data
+    log.info('Saving data for url1...');
+    let content = null;
+    try {
+        content = await page.$eval(contentSelector1, (el) => el.textContent);
+    } catch (e) {
+        throw new Error('Cannot get content (content selector is probably wrong)');
+    }
+    
+    log.info(`Storing data ...`);
+    log.info(`url1 data: ${content}`);
+    log.info(`KeyName: ` + keyname_prefix1 + dateTime);
+    await dataStore.setValue(keyname_prefix1 + dateTime, content);
+
+    // open URL2 in a browser
+    log.info(`Opening URL2: ` + url2);
+    const page = await browser.newPage();
+    await page.setViewport({ width: 1920, height: 1080 });
+    await page.goto(url2, {
+        waitUntil: 'networkidle2',
+        timeout: navigationTimeout,
+    });
+
+    // wait 5 seconds (if there is some dynamic content)
+    // TODO: this should wait for the selector to be available
+    log.info('Sleeping 5s ...');
+    await sleep(5000);
+
+    // Store data
+    log.info('Saving data for url2...');
+    let content = null;
+    try {
+        content = await page.$eval(contentSelector2, (el) => el.textContent);
+    } catch (e) {
+        throw new Error('Cannot get content (content selector is probably wrong)');
+    }
+    
+    log.info(`Storing data ...`);
+    log.info(`url2 data: ${content}`);
+    log.info(`KeyName: ` + keyname_prefix2 + dateTime);
+    await dataStore.setValue(keyname_prefix2 + dateTime, content);
+
+    // open URL3 in a browser
+    log.info(`Opening URL3: ` + url3);
+    const page = await browser.newPage();
+    await page.setViewport({ width: 1920, height: 1080 });
+    await page.goto(url3, {
+        waitUntil: 'networkidle2',
+        timeout: navigationTimeout,
+    });
+
+    // wait 5 seconds (if there is some dynamic content)
+    // TODO: this should wait for the selector to be available
+    log.info('Sleeping 5s ...');
+    await sleep(5000);
+
+    // Store data
+    log.info('Saving data for url3...');
+    let content = null;
+    try {
+        content = await page.$eval(contentSelector3, (el) => el.textContent);
+    } catch (e) {
+        throw new Error('Cannot get content (content selector is probably wrong)');
+    }
+    
+    log.info(`Storing data ...`);
+    log.info(`url3 data: ${content}`);
+    log.info(`KeyName: ` + keyname_prefix3 + dateTime);
+    await dataStore.setValue(keyname_prefix3 + dateTime, content);
 
     log.info('Closing Puppeteer...');
     await browser.close();
