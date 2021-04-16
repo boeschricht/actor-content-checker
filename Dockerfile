@@ -14,6 +14,7 @@ RUN npm --quiet set progress=false \
  && echo "NPM version:" \
  && npm --version
 
-RUN npm uninstall apify-client@0.6.0  
+RUN npm uninstall apify-client@0.6.0  \
+ && npm list
 
 ENV APIFY_DISABLE_OUTDATED_WARNING 1
