@@ -6,6 +6,7 @@ COPY . ./
 # Install default dependencies, print versions of everything
 RUN npm --quiet set progress=false \
  && npm install --only=prod \
+ && npm uninstall apify-client  \
  && npm install apify-client --only=prod \
  && echo "Installed NPM packages:" \
  && npm list \
