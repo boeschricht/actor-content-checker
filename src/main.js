@@ -44,8 +44,8 @@ Apify.main(async () => {
     // const datasetClient = await Apify.client.dataset('jrnKQ29nVrrWuz7KS');
     const apifyClient = new ApifyClient({ token: 'uAqFSRMzpGuFCkRb8fjX77tni' });
     log.info('Client: ' + apifyClient);
-    // const datasetClient = apifyClient.dataset('boeschricht/Kurser20210414');
-    const datasetClient = apifyClient.dataset('jrnKQ29nVrrWuz7KS');
+    const datasetClient = apifyClient.dataset('boeschricht/Kurser20210414');
+    // const datasetClient = apifyClient.dataset('jrnKQ29nVrrWuz7KS');
     const datasetHTML = await datasetClient.downloadItems("html");
     const datasetXLSX = await datasetClient.downloadItems("xlsx");
     await Apify.call('apify/send-mail', {
