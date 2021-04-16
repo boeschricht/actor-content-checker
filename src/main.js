@@ -47,6 +47,7 @@ Apify.main(async () => {
     const datasetClient = apifyClient.dataset('boeschricht/Kurser20210414');
     // const datasetClient = apifyClient.dataset('jrnKQ29nVrrWuz7KS');
     const datasetHTML = await datasetClient.downloadItems("html");
+    log.info('datasetHTML: ' + datasetHTML)
     const datasetXLSX = await datasetClient.downloadItems("xlsx");
     await Apify.call('apify/send-mail', {
         to: 'boeschricht@gmail.com;boeschricht@gmail.com',
