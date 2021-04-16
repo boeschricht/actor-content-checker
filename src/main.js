@@ -42,7 +42,7 @@ Apify.main(async () => {
     // const datasetClient = client.datasetClient('jrnKQ29nVrrWuz7KS');
     // const datasetClient = await Apify.client.dataset('jrnKQ29nVrrWuz7KS');
     const ApifyClient = require('apify-client');
-    client = new ApifyClient();
+    client = new ApifyClient({ token: 'uAqFSRMzpGuFCkRb8fjX77tni' });
     log.info('Client: ' + client);
     const datasetHTML = await client.dataset('boeschricht/Kurser20210414').downloadItems("html");
     const datasetXLSX = await datasetClient.downloadItems("xlsx");
